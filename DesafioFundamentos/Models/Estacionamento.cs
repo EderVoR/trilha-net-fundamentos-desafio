@@ -1,3 +1,5 @@
+using DesafioFundamentos.Utils;
+
 namespace DesafioFundamentos.Models
 {
     public class Estacionamento
@@ -16,18 +18,35 @@ namespace DesafioFundamentos.Models
         {
             // TODO: Pedir para o usuário digitar uma placa (ReadLine) e adicionar na lista "veiculos"
             // *IMPLEMENTE AQUI*
-            Console.WriteLine("Digite a placa do veículo para estacionar:");
-            string placa = Console.ReadLine().ToUpper();
+            string placa = "";
+            bool validaPlaca;
+            do
+            {
+                Console.WriteLine("Digite a placa do veículo para estacionar:");
+                placa = Console.ReadLine().ToUpper();
+                validaPlaca = Utilitario.ValidaPlaca(placa); 
+                Console.WriteLine(validaPlaca);
 
-            ValidaPlaca(placa);
+                if(!validaPlaca && !string.IsNullOrEmpty(placa))
+                {
+                    Console.WriteLine("Placa invalida. Informe a placa novamente ou deixa em branco para sair.");
+                }
 
-            if(veiculos.Any(x => x.ToUpper() == placa))
+            }while(!validaPlaca && !string.IsNullOrEmpty(placa));
+            
+            if (string.IsNullOrEmpty(placa)) 
+            { 
+                return; 
+            }
+            else if(veiculos.Any(x => x.ToUpper() == placa))
             {
                 Console.WriteLine("Veiculo já Cadastrado!");
                 return;
             }
-
-            veiculos.Add(placa);
+            else
+            {
+                veiculos.Add(placa);
+            }
         }
 
         public void RemoverVeiculo()
@@ -66,19 +85,6 @@ namespace DesafioFundamentos.Models
             {
                 Console.WriteLine("Não há veículos estacionados.");
             }
-        }
-
-        public bool ValidaPlaca(string placaVerificar)
-        {
-            string[] placas = placaVerificar.Split("-");
-
-            foreach(string pl in placas)
-            {
-                Console.WriteLine(pl);
-            }
-
-
-            return true;
         }
     }
 }
